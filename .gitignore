@@ -22,3 +22,4 @@ output/
 .env
 .env.local
 *.env
+.github/
