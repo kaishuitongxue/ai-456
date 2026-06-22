@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ tagline }}{% endblock %}">
+    <meta name="author" content="{{ author }}">
+    <link rel="canonical" href="{{ site_url }}{{ canonical_path }}">
+    <meta property="og:title" content="{{ self.title() }}">
+    <meta property="og:description" content="{{ self.description() }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ site_url }}{{ canonical_path }}">
+    <meta property="og:site_name" content="{{ site_name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" type="application/rss+xml" title="{{ site_name }} RSS" href="/rss.xml">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #f8f9fa;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 48px 0 32px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.2rem; margin-bottom: 8px; letter-spacing: 1px; }
+        header p { opacity: 0.9; font-size: 1.05rem; }
+        nav { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 12px 0; position: sticky; top: 0; z-index: 10; }
+        nav .container { display: flex; gap: 24px; flex-wrap: wrap; }
+        nav a { color: #555; text-decoration: none; font-size: 0.95rem; padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        nav a:hover { color: #667eea; border-bottom-color: #667eea; }
+        main { padding: 40px 0; min-height: 60vh; }
+        article { background: white; border-radius: 12px; padding: 36px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        article h2 { font-size: 1.5rem; margin-bottom: 10px; }
+        article h2 a { color: #1a1a2e; text-decoration: none; }
+        article h2 a:hover { color: #667eea; }
+        article .meta { color: #888; font-size: 0.88rem; margin-bottom: 16px; }
+        article .excerpt { color: #444; line-height: 1.8; }
+        article .read-more { display: inline-block; margin-top: 12px; color: #667eea; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+        article .read-more:hover { text-decoration: underline; }
+        .post-content { line-height: 1.9; font-size: 1.05rem; color: #333; }
+        .post-content h2 { font-size: 1.4rem; margin: 32px 0 14px; color: #1a1a2e; }
+        .post-content h3 { font-size: 1.2rem; margin: 24px 0 10px; color: #333; }
+        .post-content p { margin-bottom: 16px; }
+        .post-content ul, .post-content ol { margin: 12px 0 16px 24px; }
+        .post-content li { margin-bottom: 6px; }
+        .post-content code { background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .post-content pre { background: #1a1a2e; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 16px 0; font-size: 0.9rem; line-height: 1.5; }
+        .post-content pre code { background: none; padding: 0; color: inherit; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 12px 20px; margin: 16px 0; background: #f8f9ff; border-radius: 0 8px 8px 0; color: #555; }
+        .post-content img { max-width: 100%; border-radius: 8px; margin: 16px 0; }
+        .ad-placeholder { background: #fffbe6; border: 1px dashed #f0c040; border-radius: 8px; padding: 24px; text-align: center; margin: 24px 0; color: #999; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 12px; margin: 32px 0; }
+        .pagination a, .pagination span { padding: 8px 16px; border-radius: 6px; text-decoration: none; color: #667eea; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .pagination span.current { background: #667eea; color: white; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #667eea; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 32px 0; color: #999; font-size: 0.88rem; border-top: 1px solid #eee; }
+        footer a { color: #667eea; text-decoration: none; }
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .tag { background: #f0f0ff; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; }
+        .tag:hover { background: #667eea; color: white; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="/" style="color:white;text-decoration:none;">{{ site_name }}</a></h1>
+            <p>{{ tagline }}</p>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <a href="/">🏠 首页</a>
+            {% for topic in topics %}
+            <a href="/topic/{{ topic }}.html">{{ topic }}</a>
+            {% endfor %}
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; {{ current_year }} {{ site_name }} · 自动生成内容 · <a href="/rss.xml">RSS 订阅</a></p>
+        </div>
+    </footer>
+</body>
+</html>

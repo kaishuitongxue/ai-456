@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ topic }} 相关文章 - {{ site_name }}{% endblock %}
+{% block description %}浏览所有关于 {{ topic }} 的文章，每天自动更新。{% endblock %}
+{% block content %}
+<h2 style="margin-bottom:20px;color:#555;">📂 分类：{{ topic }}</h2>
+{% for post in posts %}
+<article>
+    <h2><a href="/post/{{ post.slug }}.html">{{ post.title }}</a></h2>
+    <div class="meta">📅 {{ post.date }}</div>
+    <p class="excerpt">{{ post.excerpt }}</p>
+    <a href="/post/{{ post.slug }}.html" class="read-more">阅读全文 →</a>
+</article>
+{% endfor %}
+{% if not posts %}
+<p style="text-align:center;color:#999;padding:60px 0;">暂无文章，敬请期待~</p>
+{% endif %}
+<a href="/" class="back-link">← 返回首页</a>
+{% endblock %}

@@ -1,0 +1,31 @@
+{
+  "site": {
+    "name": "知晓一刻",
+    "tagline": "每天自动更新，为你精选科技与生活好文",
+    "url": "https://YOUR_GITHUB_USERNAME.github.io/auto-content-site",
+    "language": "zh-CN",
+    "author": "AutoContent"
+  },
+  "topics": [
+    "人工智能",
+    "科技数码",
+    "编程开发",
+    "互联网资讯",
+    "生活技巧",
+    "工具推荐"
+  ],
+  "content": {
+    "posts_per_run": 1,
+    "ai_provider": "deepseek",
+    "model": "deepseek-chat"
+  },
+  "ads": {
+    "enabled": false,
+    "ad_client": "",
+    "ad_slot": ""
+  },
+  "build": {
+    "posts_per_page": 10,
+    "output_dir": "output"
+  }
+}

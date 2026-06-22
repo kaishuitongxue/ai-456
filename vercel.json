@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "output",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/post/:slug", "destination": "/post/:slug.html" },
+    { "source": "/topic/:name", "destination": "/topic/:name.html" }
+  ]
+}
