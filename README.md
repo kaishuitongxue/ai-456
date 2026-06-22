@@ -1,6 +1,8 @@
-# 🤖 全自动内容站
+# 🤖 全自动内容站 (知晓一刻)
 
 纯代码驱动的内容站点，AI 自动写作 + 自动构建部署，目标是验证"代码能否创造持续被动收入"。
+
+**当前状态**：使用 DeepSeek API，已生成 4 篇中文科技文章。
 
 ## 项目结构
 
@@ -8,12 +10,8 @@
 auto-content-site/
 ├── content/              # AI 生成的文章 (JSON)
 ├── templates/            # Jinja2 页面模板
-│   ├── base.html         # 基础布局 (SEO 元标签)
-│   ├── index.html        # 首页 (分页)
-│   ├── post.html         # 文章详情页
-│   └── topic.html        # 主题分类页
 ├── scripts/
-│   └── generate.py       # AI 内容生成器
+│   └── generate.py       # AI 内容生成器 (支持 OpenAI/DeepSeek/OpenRouter)
 ├── build.py              # 静态站点构建器
 ├── pipeline.py           # 一键流水线
 ├── config.json           # 站点配置
@@ -26,64 +24,62 @@ auto-content-site/
 # 1. 安装依赖
 pip install -r requirements.txt
 
-# 2. 设置 API Key
-export OPENAI_API_KEY="sk-xxx"
+# 2. 设置 DeepSeek API Key
+export DEEPSEEK_API_KEY="sk-xxx"
 
 # 3. 生成内容 + 构建站点
-python pipeline.py
+python pipeline.py --provider deepseek --count 1
 
-# 4. 本地预览
-python pipeline.py --serve
+# 4. 本地预览 (生成后)
+open output/index.html
 ```
+
+## 🚀 部署到 GitHub Pages
+
+### 第 1 步：创建 GitHub 仓库
+在 [github.com/new](https://github.com/new) 创建一个**公开**仓库，命名为 `auto-content-site`
+
+### 第 2 步：推送代码
+```bash
+cd auto-content-site
+git remote add origin git@github.com:你的用户名/auto-content-site.git
+git push -u origin main
+```
+
+### 第 3 步：设置 Secrets
+在仓库 Settings → Secrets and variables → Actions 中添加：
+- `DEEPSEEK_API_KEY` = 你的 DeepSeek API Key
+
+### 第 4 步：启用 GitHub Pages
+Settings → Pages → Source 选择 `Deploy from a branch`，分支选 `gh-pages`，保存。
+
+### 第 5 步：触发首次部署
+Actions 标签 → 选择 `Daily Auto Content & Deploy` → `Run workflow`
+
+部署完成后，网站将在 `https://你的用户名.github.io/auto-content-site` 上线！
+
+### 第 6 步：更新 URL
+编辑 `config.json`，将 `YOUR_GITHUB_USERNAME` 替换为你的 GitHub 用户名，提交推送。
 
 ## 常用命令
 
 | 命令 | 说明 |
 |------|------|
-| `python scripts/generate.py` | 生成一篇新文章 |
-| `python scripts/generate.py --count 5` | 批量生成 5 篇 |
-| `python scripts/generate.py --topic 人工智能` | 指定主题生成 |
+| `python scripts/generate.py --provider deepseek` | 生成一篇新文章 |
+| `python scripts/generate.py --provider deepseek --count 5` | 批量生成 |
+| `python scripts/generate.py --topic 人工智能` | 指定主题 |
 | `python build.py` | 构建静态站点 |
-| `python pipeline.py --count 3 --serve` | 生成 3 篇 + 构建 + 预览 |
+| `python pipeline.py --provider deepseek --count 3` | 生成 + 构建 |
 
-## 部署方案
+## 🔒 安全说明
 
-### 方案 A：GitHub Pages（免费）
-
-1. Fork 此仓库到你的 GitHub
-2. 在仓库 Settings → Secrets 添加 `OPENAI_API_KEY`
-3. 在 Settings → Pages 启用 GitHub Pages，选择 `gh-pages` 分支
-4. GitHub Actions 每天自动生成内容并部署
-5. 到 Cloudflare 添加你自己的域名，挂 AdSense
-
-### 方案 B：Vercel（免费）
-
-1. 本地运行 `python pipeline.py --count 10` 生成初始内容
-2. 推送到 GitHub，在 Vercel 导入项目
-3. 设置 Output Directory 为 `output`
-4. 本地每天运行一次 pipeline 并推送更新
-
-### 方案 C：本地定时任务
-
-```bash
-# 每天早 8 点自动执行
-crontab -e
-# 添加：
-0 8 * * * cd /path/to/project && python pipeline.py && git push
-```
+- API Key **不会**出现在代码中，通过 GitHub Secrets 安全存储
+- `.env` 文件和 `output/` 构建产物不会上传到仓库
+- 如需本地使用，通过环境变量 `DEEPSEEK_API_KEY` 传入
 
 ## 变现路径
 
-1. **Google AdSense** — 访问量起来后挂广告，修改 `config.json` 中 `ads.enabled: true`
-2. **亚马逊联盟** — 文章里嵌入商品链接
-3. **推广软文** — 接受付费投稿
-4. **卖站** — 站点有流量后有买家收购（通常按月收入 x20-30 倍估值）
-
-## 配置说明
-
-编辑 `config.json`：
-
-- `topics` — 文章主题列表
-- `content.posts_per_run` — 每次生成数量
-- `ads` — 广告位配置
-- `build.posts_per_page` — 每页文章数
+1. **Google AdSense** — 访问量起来后挂广告
+2. **亚马逊/京东联盟** — 文章里嵌入商品链接
+3. **付费投稿** — 接受软文推广
+4. **卖站** — 有流量后可出售（估值约月收入 x20-30 倍）
