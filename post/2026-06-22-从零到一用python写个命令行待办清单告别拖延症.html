@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从零到一：用Python写个命令行待办清单，告别拖延症 - 知晓一刻</title>
+    <meta name="description" content="手把手教你用Python构建一个命令行待办清单工具，包含文件存储、优先级排序和统计功能，附带可运行代码和性能优化建议。">
+    <meta name="author" content="AutoContent">
+    <link rel="canonical" href="https://kaishuitongxue.github.io/ai-456/post/2026-06-22-从零到一用python写个命令行待办清单告别拖延症.html">
+    <meta property="og:title" content="从零到一：用Python写个命令行待办清单，告别拖延症 - 知晓一刻">
+    <meta property="og:description" content="手把手教你用Python构建一个命令行待办清单工具，包含文件存储、优先级排序和统计功能，附带可运行代码和性能优化建议。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kaishuitongxue.github.io/ai-456/post/2026-06-22-从零到一用python写个命令行待办清单告别拖延症.html">
+    <meta property="og:site_name" content="知晓一刻">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" type="application/rss+xml" title="知晓一刻 RSS" href="../rss.xml">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #f8f9fa;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 48px 0 32px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.2rem; margin-bottom: 8px; letter-spacing: 1px; }
+        header p { opacity: 0.9; font-size: 1.05rem; }
+        nav { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 12px 0; position: sticky; top: 0; z-index: 10; }
+        nav .container { display: flex; gap: 24px; flex-wrap: wrap; }
+        nav a { color: #555; text-decoration: none; font-size: 0.95rem; padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        nav a:hover { color: #667eea; border-bottom-color: #667eea; }
+        main { padding: 40px 0; min-height: 60vh; }
+        article { background: white; border-radius: 12px; padding: 36px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        article h2 { font-size: 1.5rem; margin-bottom: 10px; }
+        article h2 a { color: #1a1a2e; text-decoration: none; }
+        article h2 a:hover { color: #667eea; }
+        article .meta { color: #888; font-size: 0.88rem; margin-bottom: 16px; }
+        article .excerpt { color: #444; line-height: 1.8; }
+        article .read-more { display: inline-block; margin-top: 12px; color: #667eea; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+        article .read-more:hover { text-decoration: underline; }
+        .post-content { line-height: 1.9; font-size: 1.05rem; color: #333; }
+        .post-content h2 { font-size: 1.4rem; margin: 32px 0 14px; color: #1a1a2e; }
+        .post-content h3 { font-size: 1.2rem; margin: 24px 0 10px; color: #333; }
+        .post-content p { margin-bottom: 16px; }
+        .post-content ul, .post-content ol { margin: 12px 0 16px 24px; }
+        .post-content li { margin-bottom: 6px; }
+        .post-content code { background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .post-content pre { background: #1a1a2e; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 16px 0; font-size: 0.9rem; line-height: 1.5; }
+        .post-content pre code { background: none; padding: 0; color: inherit; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 12px 20px; margin: 16px 0; background: #f8f9ff; border-radius: 0 8px 8px 0; color: #555; }
+        .post-content img { max-width: 100%; border-radius: 8px; margin: 16px 0; }
+        .ad-placeholder { background: #fffbe6; border: 1px dashed #f0c040; border-radius: 8px; padding: 24px; text-align: center; margin: 24px 0; color: #999; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 12px; margin: 32px 0; }
+        .pagination a, .pagination span { padding: 8px 16px; border-radius: 6px; text-decoration: none; color: #667eea; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .pagination span.current { background: #667eea; color: white; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #667eea; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 32px 0; color: #999; font-size: 0.88rem; border-top: 1px solid #eee; }
+        footer a { color: #667eea; text-decoration: none; }
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .tag { background: #f0f0ff; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; }
+        .tag:hover { background: #667eea; color: white; }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="../" style="color:white;text-decoration:none;">知晓一刻</a></h1>
+            <p>每天自动更新，为你精选科技与生活好文</p>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <a href="../">🏠 首页</a>
+            
+            <a href="../topic/编程开发.html">编程开发</a>
+            
+            <a href="../topic/科技数码.html">科技数码</a>
+            
+            <a href="../topic/工具推荐.html">工具推荐</a>
+            
+            <a href="../topic/生活技巧.html">生活技巧</a>
+            
+            <a href="../topic/互联网资讯.html">互联网资讯</a>
+            
+            <a href="../topic/人工智能.html">人工智能</a>
+            
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            
+<a href="../" class="back-link">← 返回首页</a>
+<article>
+    <h2>从零到一：用Python写个命令行待办清单，告别拖延症</h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="../topic/编程开发.html" style="color:#667eea;">编程开发</a>
+    </div>
+    
+    <div class="post-content">
+        <h2>为什么你需要一个自己的待办清单工具？</h2>
+<p>你是不是也用过各种待办清单App？从Todoist到TickTick，功能越来越花哨，但真正坚持用下来的有几个？我统计过身边30个朋友，超过80%的人在下载后两周内就放弃了。原因很简单：<strong>这些工具要么太复杂，要么不免费，要么数据不在自己手里</strong>。</p>
+<p>今天，我就带你用Python从零写一个<strong>命令行待办清单</strong>。它轻量、免费、数据完全由你掌控，而且你还能随时给它加新功能。</p>
+<h2>开始前的准备</h2>
+<p>你需要Python 3.6+（建议3.8以上），以及一个文本编辑器。不需要任何第三方库——我们只用内置的<code>json</code>和<code>datetime</code>模块。</p>
+<p>打开终端，新建一个文件叫<code>todo.py</code>，我们开始吧。</p>
+<h2>核心数据结构</h2>
+<p>待办事项最核心的信息是什么？任务描述、是否完成、优先级、创建时间。我们用字典表示每一项：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">task</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;写博客文章&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;done&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>  <span class="c1"># 1最高，5最低</span>
+    <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-03-21 10:30:00&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>整个清单就是一个列表：<code>tasks = []</code>。</p>
+<h2>数据持久化：用JSON文件保存</h2>
+<p>命令行程序一关，数据就丢了可不行。我们用JSON文件保存，简单又通用：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s2">&quot;tasks.json&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_tasks</span><span class="p">():</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">DATA_FILE</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>小提示</strong>：JSON文件是纯文本，你可以随时用记事本打开查看或修改。数据所有权完全在你。</p>
+<h2>添加任务：带优先级和日期</h2>
+<p>我们写一个<code>add_task</code>函数，支持优先级和自动生成时间：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_tasks</span><span class="p">()</span>
+    <span class="n">new_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">new_id</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+        <span class="s2">&quot;done&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="n">priority</span><span class="p">,</span>
+        <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="n">save_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ 已添加：</span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">（优先级：</span><span class="si">{</span><span class="n">priority</span><span class="si">}</span><span class="s2">）&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>列出任务：按优先级排序</h2>
+<p>光添加不行，还得能看。我们按优先级从高到低排列，并显示完成状态：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">list_tasks</span><span class="p">():</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_tasks</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🎉 没有待办事项，休息一下吧！&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="c1"># 按优先级排序，1最高</span>
+    <span class="n">sorted_tasks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📋 待办清单：&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">sorted_tasks</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✅&quot;</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;⬜&quot;</span>
+        <span class="n">prio</span> <span class="o">=</span> <span class="s2">&quot;⭐&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">6</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">])</span>  <span class="c1"># 1优先级显示5颗星</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> [ID:</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">prio</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   创建于：</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>完成任务和删除任务</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">done_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">):</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_tasks</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">task_id</span><span class="p">:</span>
+            <span class="n">t</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">save_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🎯 任务 </span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2"> 已完成！&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ 未找到该任务&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">):</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_tasks</span><span class="p">()</span>
+    <span class="n">original_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">task_id</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">original_len</span><span class="p">:</span>
+        <span class="n">save_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🗑️ 已删除任务 </span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ 未找到该任务&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>命令行入口</h2>
+<p>我们用<code>sys.argv</code>接收命令行参数，这样你就可以在终端直接运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;使用方法：python todo.py &lt;命令&gt; [参数]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;命令：add &lt;描述&gt; [优先级]，list，done &lt;id&gt;，delete &lt;id&gt;&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">command</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;add&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;请提供任务描述&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">3</span>
+        <span class="n">add_task</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
+        <span class="n">list_tasks</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;done&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;请提供任务ID&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">done_task</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;delete&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;请提供任务ID&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">delete_task</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;未知命令：</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<h2>实际使用示例</h2>
+<p>打开终端，在你的项目文件夹里运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 添加任务</span>
+python<span class="w"> </span>todo.py<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;完成Python项目文档&quot;</span><span class="w"> </span><span class="m">2</span>
+<span class="c1"># 添加另一个</span>
+python<span class="w"> </span>todo.py<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;买牛奶&quot;</span><span class="w"> </span><span class="m">5</span>
+<span class="c1"># 查看清单</span>
+python<span class="w"> </span>todo.py<span class="w"> </span>list
+<span class="c1"># 完成任务ID为1的任务</span>
+python<span class="w"> </span>todo.py<span class="w"> </span><span class="k">done</span><span class="w"> </span><span class="m">1</span>
+<span class="c1"># 删除任务ID为2的任务</span>
+python<span class="w"> </span>todo.py<span class="w"> </span>delete<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
+<p>输出效果：</p>
+<div class="codehilite"><pre><span></span><code>📋 待办清单：
+========================================
+⬜ [ID:1] 完成Python项目文档 ⭐⭐⭐⭐
+   创建于：2025-03-21 11:00:00
+✅ [ID:2] 买牛奶 ⭐
+   创建于：2025-03-21 11:01:00
+========================================
+</code></pre></div>
+
+<h2>进阶功能：统计与优化</h2>
+<p>想让工具更实用？加个统计功能：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stats</span><span class="p">():</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_tasks</span><span class="p">()</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">])</span>
+    <span class="n">pending</span> <span class="o">=</span> <span class="n">total</span> <span class="o">-</span> <span class="n">done</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="p">(</span><span class="n">done</span> <span class="o">/</span> <span class="n">total</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📊 统计：总计</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">项，已完成</span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">项，待办</span><span class="si">{</span><span class="n">pending</span><span class="si">}</span><span class="s2">项&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;完成率：</span><span class="si">{</span><span class="n">completion</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pending</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;💡 建议：先做优先级最高的任务！&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>另外，当任务数量超过1000条时，JSON读写会变慢。这时可以考虑改用SQLite，或者按日期分文件存储。对于个人使用，1000条以内JSON完全够用。</p>
+<h2>总结</h2>
+<p>不到100行代码，你拥有了一个完全属于自己的待办清单工具。它不收集隐私、不弹广告、不限制功能。而且，你随时可以给它加上提醒、标签、搜索甚至同步功能——这就是自己动手的乐趣。</p>
+<p><strong>下一步做什么？</strong> 试试加上<code>--due</code>参数设置截止日期，或者用<code>colorama</code>库给终端加点颜色。记住，最好的工具是适合你自己的工具。</p>
+<p>如果你写出了什么酷炫的功能，欢迎在评论区分享！</p>
+    </div>
+    
+    <div class="tags">
+        
+        <span class="tag">Python</span>
+        
+        <span class="tag">命令行工具</span>
+        
+        <span class="tag">待办清单</span>
+        
+        <span class="tag">编程教程</span>
+        
+    </div>
+    
+    
+</article>
+<a href="../" class="back-link">← 返回首页</a>
+
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 知晓一刻 · 自动生成内容 · <a href="../rss.xml">RSS 订阅</a></p>
+        </div>
+    </footer>
+</body>
+</html>

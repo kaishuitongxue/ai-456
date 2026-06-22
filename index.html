@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知晓一刻 - 每天自动更新，为你精选科技与生活好文</title>
+    <meta name="description" content="每天自动更新，为你精选科技与生活好文">
+    <meta name="author" content="AutoContent">
+    <link rel="canonical" href="https://kaishuitongxue.github.io/ai-456/">
+    <meta property="og:title" content="知晓一刻 - 每天自动更新，为你精选科技与生活好文">
+    <meta property="og:description" content="每天自动更新，为你精选科技与生活好文">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kaishuitongxue.github.io/ai-456/">
+    <meta property="og:site_name" content="知晓一刻">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="alternate" type="application/rss+xml" title="知晓一刻 RSS" href="./rss.xml">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #f8f9fa;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 48px 0 32px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.2rem; margin-bottom: 8px; letter-spacing: 1px; }
+        header p { opacity: 0.9; font-size: 1.05rem; }
+        nav { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 12px 0; position: sticky; top: 0; z-index: 10; }
+        nav .container { display: flex; gap: 24px; flex-wrap: wrap; }
+        nav a { color: #555; text-decoration: none; font-size: 0.95rem; padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        nav a:hover { color: #667eea; border-bottom-color: #667eea; }
+        main { padding: 40px 0; min-height: 60vh; }
+        article { background: white; border-radius: 12px; padding: 36px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        article h2 { font-size: 1.5rem; margin-bottom: 10px; }
+        article h2 a { color: #1a1a2e; text-decoration: none; }
+        article h2 a:hover { color: #667eea; }
+        article .meta { color: #888; font-size: 0.88rem; margin-bottom: 16px; }
+        article .excerpt { color: #444; line-height: 1.8; }
+        article .read-more { display: inline-block; margin-top: 12px; color: #667eea; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+        article .read-more:hover { text-decoration: underline; }
+        .post-content { line-height: 1.9; font-size: 1.05rem; color: #333; }
+        .post-content h2 { font-size: 1.4rem; margin: 32px 0 14px; color: #1a1a2e; }
+        .post-content h3 { font-size: 1.2rem; margin: 24px 0 10px; color: #333; }
+        .post-content p { margin-bottom: 16px; }
+        .post-content ul, .post-content ol { margin: 12px 0 16px 24px; }
+        .post-content li { margin-bottom: 6px; }
+        .post-content code { background: #f1f3f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .post-content pre { background: #1a1a2e; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 16px 0; font-size: 0.9rem; line-height: 1.5; }
+        .post-content pre code { background: none; padding: 0; color: inherit; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 12px 20px; margin: 16px 0; background: #f8f9ff; border-radius: 0 8px 8px 0; color: #555; }
+        .post-content img { max-width: 100%; border-radius: 8px; margin: 16px 0; }
+        .ad-placeholder { background: #fffbe6; border: 1px dashed #f0c040; border-radius: 8px; padding: 24px; text-align: center; margin: 24px 0; color: #999; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 12px; margin: 32px 0; }
+        .pagination a, .pagination span { padding: 8px 16px; border-radius: 6px; text-decoration: none; color: #667eea; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .pagination span.current { background: #667eea; color: white; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #667eea; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 32px 0; color: #999; font-size: 0.88rem; border-top: 1px solid #eee; }
+        footer a { color: #667eea; text-decoration: none; }
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+        .tag { background: #f0f0ff; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; }
+        .tag:hover { background: #667eea; color: white; }
+    </style>
+    
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="./" style="color:white;text-decoration:none;">知晓一刻</a></h1>
+            <p>每天自动更新，为你精选科技与生活好文</p>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <a href="./">🏠 首页</a>
+            
+            <a href="./topic/编程开发.html">编程开发</a>
+            
+            <a href="./topic/科技数码.html">科技数码</a>
+            
+            <a href="./topic/工具推荐.html">工具推荐</a>
+            
+            <a href="./topic/生活技巧.html">生活技巧</a>
+            
+            <a href="./topic/互联网资讯.html">互联网资讯</a>
+            
+            <a href="./topic/人工智能.html">人工智能</a>
+            
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            
+
+<article>
+    <h2><a href="./post/2026-06-22-编程新手必看用这5个技巧提升代码质量与效率.html">编程新手必看：用这5个技巧提升代码质量与效率</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/编程开发.html" style="color:#667eea;">编程开发</a>
+    </div>
+    <p class="excerpt">从菜鸟到大神，代码质量是关键。本文分享5个实用技巧，包括代码审查、单元测试、版本控制等，帮你写出更健壮、可维护的代码，提升开发效率。</p>
+    <a href="./post/2026-06-22-编程新手必看用这5个技巧提升代码质量与效率.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-手机拍照太假三招调出高级感告别数码味.html">手机拍照太假？三招调出高级感，告别“数码味”</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/科技数码.html" style="color:#667eea;">科技数码</a>
+    </div>
+    <p class="excerpt">你的手机照片是不是总被吐槽“塑料味”？别急着买新机，三个设置+一个免费App，就能让照片瞬间拥有专业相机的质感。本文手把手教你调出自然通透的高级感。</p>
+    <a href="./post/2026-06-22-手机拍照太假三招调出高级感告别数码味.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-告别数据焦虑3个实用技巧让手机存储翻倍.html">告别数据焦虑：3个实用技巧让手机存储翻倍</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/科技数码.html" style="color:#667eea;">科技数码</a>
+    </div>
+    <p class="excerpt">手机存储总是不够用？本文分享3个亲测有效的技巧，从清理缓存到云存储优化，助你轻松释放空间，告别频繁删文件的烦恼。</p>
+    <a href="./post/2026-06-22-告别数据焦虑3个实用技巧让手机存储翻倍.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-告别低效5款免费神器让你的工作效率翻倍.html">告别低效：5款免费神器让你的工作效率翻倍</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/工具推荐.html" style="color:#667eea;">工具推荐</a>
+    </div>
+    <p class="excerpt">从笔记、截图到任务管理，这5款免费工具能帮你节省大量时间，提升效率。本文提供具体使用案例和操作建议，助你快速上手。</p>
+    <a href="./post/2026-06-22-告别低效5款免费神器让你的工作效率翻倍.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从零到一用python构建第一个聊天机器人只需50行代码.html">从零到一：用Python构建第一个聊天机器人，只需50行代码</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/编程开发.html" style="color:#667eea;">编程开发</a>
+    </div>
+    <p class="excerpt">本文手把手教你用Python和Flask搭建一个简单的聊天机器人，涵盖基础框架、API调用和部署技巧，即使零基础也能快速上手。</p>
+    <a href="./post/2026-06-22-从零到一用python构建第一个聊天机器人只需50行代码.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从零到一用python写个命令行待办清单告别拖延症.html">从零到一：用Python写个命令行待办清单，告别拖延症</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/编程开发.html" style="color:#667eea;">编程开发</a>
+    </div>
+    <p class="excerpt">手把手教你用Python构建一个命令行待办清单工具，包含文件存储、优先级排序和统计功能，附带可运行代码和性能优化建议。</p>
+    <a href="./post/2026-06-22-从零到一用python写个命令行待办清单告别拖延症.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从零到一用ai辅助开发你的第一个实用小程序.html">从零到一：用AI辅助开发你的第一个实用小程序</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/编程开发.html" style="color:#667eea;">编程开发</a>
+    </div>
+    <p class="excerpt">不会写代码？没关系！手把手教你用Cursor和Claude，从零搭建一个自动整理桌面文件的工具，体验AI编程的魔力。</p>
+    <a href="./post/2026-06-22-从零到一用ai辅助开发你的第一个实用小程序.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从杂乱到有序3个科学整理法让你的生活效率翻倍.html">从杂乱到有序：3个科学整理法，让你的生活效率翻倍</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/生活技巧.html" style="color:#667eea;">生活技巧</a>
+    </div>
+    <p class="excerpt">告别混乱，拥抱高效生活！本文结合行为心理学和实操技巧，分享3个经过验证的整理方法，帮你节省每天30分钟找东西的时间。从桌面到手机，从思维到行动，一起开启有序人生。</p>
+    <a href="./post/2026-06-22-从杂乱到有序3个科学整理法让你的生活效率翻倍.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从入门到进阶2024年必学的5个python自动化技巧效率翻倍.html">从入门到进阶：2024年必学的5个Python自动化技巧，效率翻倍</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/科技数码.html" style="color:#667eea;">科技数码</a>
+    </div>
+    <p class="excerpt">厌倦了重复的电脑操作？本文用5个真实案例，手把手教你用Python自动化文件整理、网页数据抓取、邮件发送等任务，附代码和避坑指南，零基础也能上手。</p>
+    <a href="./post/2026-06-22-从入门到进阶2024年必学的5个python自动化技巧效率翻倍.html" class="read-more">阅读全文 →</a>
+</article>
+
+<article>
+    <h2><a href="./post/2026-06-22-从上网到上云2025年互联网新趋势与实用指南.html">从“上网”到“上云”：2025年互联网新趋势与实用指南</a></h2>
+    <div class="meta">
+        📅 2026-06-22 &nbsp;·&nbsp; 🏷️ <a href="./topic/互联网资讯.html" style="color:#667eea;">互联网资讯</a>
+    </div>
+    <p class="excerpt">2025年互联网正在经历从“连接”到“智能”的质变。本文用真实案例、最新数据和可操作建议，带你读懂AI原生应用、去中心化社交和低代码浪潮，帮你抓住数字生活的新红利。</p>
+    <a href="./post/2026-06-22-从上网到上云2025年互联网新趋势与实用指南.html" class="read-more">阅读全文 →</a>
+</article>
+
+
+
+<div class="pagination">
+    
+    
+        
+        <span class="current">1</span>
+        
+    
+        
+        <a href="2.html">2</a>
+        
+    
+    
+    <a href="2.html">下一页 →</a>
+    
+</div>
+
+
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 知晓一刻 · 自动生成内容 · <a href="./rss.xml">RSS 订阅</a></p>
+        </div>
+    </footer>
+</body>
+</html>
