@@ -3,11 +3,11 @@
 {% block description %}{{ excerpt }}{% endblock %}
 {% block og_type %}article{% endblock %}
 {% block content %}
-<a href="/" class="back-link">← 返回首页</a>
+<a href="{{ relative_root }}" class="back-link">← 返回首页</a>
 <article>
     <h2>{{ title }}</h2>
     <div class="meta">
-        📅 {{ date }} &nbsp;·&nbsp; 🏷️ <a href="/topic/{{ topic }}.html" style="color:#667eea;">{{ topic }}</a>
+        📅 {{ date }} &nbsp;·&nbsp; 🏷️ <a href="{{ relative_root }}topic/{{ topic }}.html" style="color:#667eea;">{{ topic }}</a>
     </div>
     {% if ad_enabled %}
     <div class="ad-placeholder">📢 广告位 — 在此插入 AdSense 代码</div>
@@ -26,5 +26,5 @@
     <div class="ad-placeholder">📢 广告位 — 在此插入 AdSense 代码</div>
     {% endif %}
 </article>
-<a href="/" class="back-link">← 返回首页</a>
+<a href="{{ relative_root }}" class="back-link">← 返回首页</a>
 {% endblock %}

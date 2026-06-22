@@ -5,10 +5,10 @@
 <h2 style="margin-bottom:20px;color:#555;">📂 分类：{{ topic }}</h2>
 {% for post in posts %}
 <article>
-    <h2><a href="/post/{{ post.slug }}.html">{{ post.title }}</a></h2>
+    <h2><a href="{{ relative_root }}post/{{ post.slug }}.html">{{ post.title }}</a></h2>
     <div class="meta">📅 {{ post.date }}</div>
     <p class="excerpt">{{ post.excerpt }}</p>
-    <a href="/post/{{ post.slug }}.html" class="read-more">阅读全文 →</a>
+    <a href="{{ relative_root }}post/{{ post.slug }}.html" class="read-more">阅读全文 →</a>
 </article>
 {% endfor %}
 {% if not posts %}

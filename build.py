@@ -97,6 +97,7 @@ def build_site():
     post_dir.mkdir(parents=True, exist_ok=True)
     for article in articles:
         ctx = {**base_context}
+        ctx["relative_root"] = "../"
         ctx.update({
             "title": article["title"],
             "date": article["date"],
@@ -121,6 +122,7 @@ def build_site():
         page_prefix = "" if page == 1 else "page-"
 
         ctx = {**base_context}
+        ctx["relative_root"] = "./"
         ctx.update({
             "posts": page_posts,
             "current_page": page,
@@ -136,6 +138,7 @@ def build_site():
     topic_dir.mkdir(parents=True, exist_ok=True)
     for topic, t_articles in topic_articles.items():
         ctx = {**base_context}
+        ctx["relative_root"] = "../"
         ctx.update({
             "topic": topic,
             "posts": t_articles,

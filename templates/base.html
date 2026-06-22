@@ -13,7 +13,7 @@
     <meta property="og:url" content="{{ site_url }}{{ canonical_path }}">
     <meta property="og:site_name" content="{{ site_name }}">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="alternate" type="application/rss+xml" title="{{ site_name }} RSS" href="/rss.xml">
+    <link rel="alternate" type="application/rss+xml" title="{{ site_name }} RSS" href="{{ relative_root }}rss.xml">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -72,15 +72,15 @@
 <body>
     <header>
         <div class="container">
-            <h1><a href="/" style="color:white;text-decoration:none;">{{ site_name }}</a></h1>
+            <h1><a href="{{ relative_root }}" style="color:white;text-decoration:none;">{{ site_name }}</a></h1>
             <p>{{ tagline }}</p>
         </div>
     </header>
     <nav>
         <div class="container">
-            <a href="/">🏠 首页</a>
+            <a href="{{ relative_root }}">🏠 首页</a>
             {% for topic in topics %}
-            <a href="/topic/{{ topic }}.html">{{ topic }}</a>
+            <a href="{{ relative_root }}topic/{{ topic }}.html">{{ topic }}</a>
             {% endfor %}
         </div>
     </nav>
@@ -91,7 +91,7 @@
     </main>
     <footer>
         <div class="container">
-            <p>&copy; {{ current_year }} {{ site_name }} · 自动生成内容 · <a href="/rss.xml">RSS 订阅</a></p>
+            <p>&copy; {{ current_year }} {{ site_name }} · 自动生成内容 · <a href="{{ relative_root }}rss.xml">RSS 订阅</a></p>
         </div>
     </footer>
 </body>

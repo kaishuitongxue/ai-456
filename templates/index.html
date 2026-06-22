@@ -4,12 +4,12 @@
 {% block content %}
 {% for post in posts %}
 <article>
-    <h2><a href="/post/{{ post.slug }}.html">{{ post.title }}</a></h2>
+    <h2><a href="{{ relative_root }}post/{{ post.slug }}.html">{{ post.title }}</a></h2>
     <div class="meta">
-        📅 {{ post.date }} &nbsp;·&nbsp; 🏷️ <a href="/topic/{{ post.topic }}.html" style="color:#667eea;">{{ post.topic }}</a>
+        📅 {{ post.date }} &nbsp;·&nbsp; 🏷️ <a href="{{ relative_root }}topic/{{ post.topic }}.html" style="color:#667eea;">{{ post.topic }}</a>
     </div>
     <p class="excerpt">{{ post.excerpt }}</p>
-    <a href="/post/{{ post.slug }}.html" class="read-more">阅读全文 →</a>
+    <a href="{{ relative_root }}post/{{ post.slug }}.html" class="read-more">阅读全文 →</a>
 </article>
 {% endfor %}
 
